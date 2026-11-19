@@ -34,10 +34,10 @@ async function versaoInstalada(): Promise<string | null> {
 }
 
 export async function GET() {
-  const current = (await versaoInstalada()) ?? '0.0.0';
+  const current = await versaoInstalada();
   let latest: string | null = null;
   try {
-    const r = await fetch('https://api.github.com/repos/claudioorjunior/geronticare/releases/latest', {
+    const r = await fetch('https://api.github.com/repos/claudiumio/geronticare/releases/latest', {
       headers: { Accept: 'application/vnd.github+json' },
       next: { revalidate: 3600 },
     });
@@ -47,7 +47,7 @@ export async function GET() {
       if (/^\d+\.\d+\.\d+$/.test(tag)) latest = tag;
     }
   } catch {}
-  const updateAvailable = latest ? semverGt(latest, current.replace(/^v/, '')) : false;
+  const updateAvailable = Boolean(current && latest && semverGt(latest, current.replace(/^v/, '')));
   return NextResponse.json(
     { current, latest, updateAvailable },
     { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' } },

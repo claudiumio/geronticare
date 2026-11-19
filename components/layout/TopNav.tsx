@@ -12,7 +12,7 @@ import { useUserRole } from '@/lib/auth/use-user-role';
 import { authClient, logoutAndClearClientState } from '@/lib/auth/client';
 
 function useVersionCheck(enabled: boolean) {
-  const [data, setData] = useState<{ current: string; latest: string | null; updateAvailable: boolean } | null>(null);
+  const [data, setData] = useState<{ current: string | null; latest: string | null; updateAvailable: boolean } | null>(null);
   useEffect(() => {
     if (!enabled) return;
     let cancelled = false;
@@ -220,7 +220,7 @@ export function TopNav() {
                       <div className="font-medium text-m3-on-surface">Nova versão disponível</div>
                       <div className="text-m3-secondary text-xs mt-1">v{versionInfo.latest} disponível (atual v{versionInfo.current})</div>
                       <Link href="/admin/atualizacao" onClick={() => setNotifOpen(false)} className="mt-3 inline-flex items-center justify-center rounded-full bg-m3-primary px-4 py-1.5 text-xs font-medium text-white hover:bg-m3-primary/90">Atualizar agora →</Link>
-                      <a href="https://github.com/claudioorjunior/geronticare/releases" target="_blank" rel="noopener noreferrer" className="text-m3-primary text-xs mt-2 ml-3 inline-block hover:underline">Ver releases</a>
+                      <a href="https://github.com/claudiumio/geronticare/releases" target="_blank" rel="noopener noreferrer" className="text-m3-primary text-xs mt-2 ml-3 inline-block hover:underline">Ver releases</a>
                     </div>
                   ) : (
                     <div className="px-4 py-3 text-m3-secondary">Nenhuma atualização disponível.</div>

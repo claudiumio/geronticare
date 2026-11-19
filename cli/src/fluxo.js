@@ -700,7 +700,7 @@ async function resolverVersaoAlvo({ versaoAlvo, fetchFn }) {
     if (!versaoSegura(v)) throw new Error(`Versão inválida: ${versaoAlvo}. Use X.Y.Z.`);
     return v;
   }
-  const resposta = await fetchFn('https://api.github.com/repos/claudioorjunior/geronticare/releases/latest');
+  const resposta = await fetchFn('https://api.github.com/repos/claudiumio/geronticare/releases/latest');
   if (!resposta.ok) throw new Error('Não foi possível resolver a versão mais recente.');
   const dados = await resposta.json();
   const tag = String(dados.tag_name ?? dados.name ?? '').replace(/^v/, '');

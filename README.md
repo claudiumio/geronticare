@@ -14,9 +14,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/claudioorjunior/geronticare/actions/workflows/ci.yml"><img src="https://github.com/claudioorjunior/geronticare/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/claudioorjunior/geronticare/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
-  <a href="https://github.com/claudioorjunior/geronticare/releases"><img src="https://img.shields.io/badge/release-v0.5.5-blue.svg" alt="Release v0.5.5"></a>
+  <a href="https://github.com/claudiumio/geronticare/actions/workflows/ci.yml"><img src="https://github.com/claudiumio/geronticare/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/claudiumio/geronticare/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
+  <a href="https://github.com/claudiumio/geronticare/releases"><img src="https://img.shields.io/badge/release-v0.5.5-blue.svg" alt="Release v0.5.5"></a>
   <img src="https://img.shields.io/badge/Node-22-339933?logo=node.js" alt="Node 22">
   <img src="https://img.shields.io/badge/PostgreSQL-16--18-4169E1?logo=postgresql" alt="PostgreSQL 16-18">
   <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js 16">
@@ -185,7 +185,7 @@ The installation is a **resumable state machine** with 10 phases — `PREFLIGHT`
 
 ```bash
 # 1. Clone
-git clone https://github.com/claudioorjunior/geronticare.git
+git clone https://github.com/claudiumio/geronticare.git
 cd geronticare
 
 # 2. Install

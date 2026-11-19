@@ -155,7 +155,7 @@ async function prepararRelease({ versao, porta }) {
   const urlApp = `http://127.0.0.1:${porta}`;
   const nomeTar = `geronticare-app-v${versao}.tar.gz`;
   const nomeSha = `geronticare-app-v${versao}.sha256`;
-  const baseUrl = `https://github.com/claudioorjunior/geronticare/releases/download/v${versao}`;
+  const baseUrl = `https://github.com/claudiumio/geronticare/releases/download/v${versao}`;
 
   const marker = await lerJson(releaseDir, 'verified.json');
   if (marker?.sha256 && marker?.arquivo === nomeTar) {

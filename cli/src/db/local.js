@@ -42,6 +42,11 @@ export function comandoAssincrono([comando, ...args], { env, cwd, input, signal 
   });
 }
 
+function binario(binDir, nome, plataforma = process.platform) {
+  const arquivo = plataforma === 'win32' ? `${nome}.exe` : nome;
+  return join(binDir, arquivo);
+}
+
 function dirsCandidatos(plataforma) {
   if (plataforma === 'darwin') {
     return [
@@ -65,10 +70,10 @@ function dirsCandidatos(plataforma) {
   return [];
 }
 
-async function binariosPresentes(fs, binDir) {
+async function binariosPresentes(fs, binDir, plataforma = process.platform) {
   for (const bin of ['initdb', 'pg_ctl']) {
     try {
-      await fs.stat(join(binDir, bin));
+      await fs.stat(binario(binDir, bin, plataforma));
     } catch {
       return false;
     }
@@ -83,8 +88,8 @@ async function lerVersaoPostgres(caminho, executar) {
   return Number.isNaN(major) ? null : major;
 }
 
-export async function validarBinarioPostgres({ binDir, executar = comandoAssincrono } = {}) {
-  const versao = await lerVersaoPostgres(join(binDir, 'postgres'), executar);
+export async function validarBinarioPostgres({ binDir, executar = comandoAssincrono, plataforma = process.platform } = {}) {
+  const versao = await lerVersaoPostgres(binario(binDir, 'postgres', plataforma), executar);
   if (versao === null || versao < 16 || versao > 18) {
     throw new Error('A instalação PostgreSQL local não está na matriz suportada (16, 17 ou 18).');
   }
@@ -97,12 +102,12 @@ export async function detectarPostgres({
   plataforma = process.platform,
 } = {}) {
   for (const binDir of dirsCandidatos(plataforma)) {
-    if (!(await binariosPresentes(fs, binDir))) continue;
-    const versao = await lerVersaoPostgres(join(binDir, 'postgres'), executar);
+    if (!(await binariosPresentes(fs, binDir, plataforma))) continue;
+    const versao = await lerVersaoPostgres(binario(binDir, 'postgres', plataforma), executar);
     if (versao === null) continue;
     if (plataforma === 'win32') return { binDir, versao, instaladoPorNos: false };
     const resultado = await executar(
-      [join(binDir, 'psql'), '-c', 'SELECT 1'],
+      [binario(binDir, 'psql', plataforma), '-c', 'SELECT 1'],
       {
         env: {
           ...process.env,
@@ -123,9 +128,10 @@ export async function validarPostgresLocal({
   porta = PORTA_POSTGRES_PADRAO,
   executar = comandoAssincrono,
   senha,
+  plataforma = process.platform,
 } = {}) {
   const resultado = await executar(
-    [join(binDir, 'psql'), '-h', '127.0.0.1', '-p', String(porta), '-U', 'postgres', '-d', 'postgres', '-f', '-'],
+    [binario(binDir, 'psql', plataforma), '-h', '127.0.0.1', '-p', String(porta), '-U', 'postgres', '-d', 'postgres', '-f', '-'],
     {
       env: { ...process.env, PGPASSWORD: senha },
       input: 'SELECT 1;\n',
@@ -368,7 +374,7 @@ export async function instalarPostgres({
   throw new Error('O banco de dados local não é suportado neste sistema. Use Neon ou Supabase.');
 }
 
-async function iniciarCluster({ binDir, root, porta, executar, fs, superuserPassword, sinal }) {
+async function iniciarCluster({ binDir, root, porta, executar, fs, superuserPassword, sinal, plataforma = process.platform }) {
   const pgdata = join(root, 'pgdata');
   try {
     await fs.stat(pgdata);
@@ -380,7 +386,7 @@ async function iniciarCluster({ binDir, root, porta, executar, fs, superuserPass
       const auth = ['--auth-local=trust', '--auth-host=scram-sha-256', '--pwfile', senhaPath];
       await rodar(
         executar,
-        [join(binDir, 'initdb'), '-D', pgdata, '-U', 'postgres', ...auth, '-E', 'UTF8'],
+        [binario(binDir, 'initdb', plataforma), '-D', pgdata, '-U', 'postgres', ...auth, '-E', 'UTF8'],
         'Falha ao inicializar o cluster PostgreSQL.',
         { signal: sinal },
       );
@@ -393,22 +399,22 @@ async function iniciarCluster({ binDir, root, porta, executar, fs, superuserPass
   await fs.mkdir(dirname(logPath), { recursive: true });
   await rodar(
     executar,
-    [join(binDir, 'pg_ctl'), '-D', pgdata, '-o', `-p ${porta} -h 127.0.0.1`, '-l', logPath, 'start'],
+    [binario(binDir, 'pg_ctl', plataforma), '-D', pgdata, '-o', `-p ${porta} -h 127.0.0.1`, '-l', logPath, 'start'],
     'Falha ao iniciar o PostgreSQL.',
     { signal: sinal },
   );
 
-  if (!(await aguardarPronto(binDir, porta, executar, sinal))) {
+  if (!(await aguardarPronto(binDir, porta, executar, sinal, plataforma))) {
     throw new Error('O PostgreSQL não ficou pronto em 10 segundos.');
   }
 }
 
-async function aguardarPronto(binDir, porta, executar, sinal) {
+async function aguardarPronto(binDir, porta, executar, sinal, plataforma = process.platform) {
   const limite = Date.now() + 10_000;
   while (Date.now() < limite) {
     if (sinal?.aborted) return false;
     const resultado = await executar(
-      [join(binDir, 'pg_isready'), '-h', '127.0.0.1', '-p', String(porta)],
+      [binario(binDir, 'pg_isready', plataforma), '-h', '127.0.0.1', '-p', String(porta)],
       { signal: sinal },
     );
     if (resultado.exitCode === 0) return true;
@@ -424,9 +430,9 @@ async function aguardarPronto(binDir, porta, executar, sinal) {
 }
 
 function montarSuperuser({ binDir, porta, plataforma, instaladoPorNos, superuserPassword }) {
-  const base = [join(binDir, 'psql'), '-h', '127.0.0.1', '-p', String(porta)];
+  const base = [binario(binDir, 'psql', plataforma), '-h', '127.0.0.1', '-p', String(porta)];
   if (!instaladoPorNos && plataforma === 'linux') {
-    return { args: ['sudo', '-u', 'postgres', join(binDir, 'psql'), '-d', 'postgres', '-f', '-'], env: null };
+    return { args: ['sudo', '-u', 'postgres', binario(binDir, 'psql', plataforma), '-d', 'postgres', '-f', '-'], env: null };
   }
   const usuario = instaladoPorNos || plataforma === 'win32' ? 'postgres' : userInfo().username;
   return {
@@ -476,9 +482,7 @@ export async function criarBancoDedicado({
 } = {}) {
   if (instaladoPorNos) {
     await confirmarOuCancelar(confirmar, { mensagem: 'Inicializar e iniciar o cluster PostgreSQL dedicado do GerontiCare?' });
-    if (plataforma !== 'win32') {
-      await iniciarCluster({ binDir, root, porta, executar, fs, superuserPassword, sinal });
-    }
+    await iniciarCluster({ binDir, root, porta, executar, fs, superuserPassword, sinal, plataforma });
   }
 
   const senha = gerarSenhaBanco(24);

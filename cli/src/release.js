@@ -173,7 +173,7 @@ export async function prepararRelease({
   root,
   versao,
   porta,
-  github = { repo: 'claudioorjunior/geronticare' },
+  github = { repo: 'claudiumio/geronticare' },
   fetchFn = fetch,
   spawnFn,
   log = console.log,

@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   let alvo = body.versaoAlvo ? String(body.versaoAlvo).replace(/^v/, '') : '';
   if (!alvo) {
     try {
-      const r = await fetch('https://api.github.com/repos/claudioorjunior/geronticare/releases/latest', {
+      const r = await fetch('https://api.github.com/repos/claudiumio/geronticare/releases/latest', {
         headers: { Accept: 'application/vnd.github+json' },
       });
       if (!r.ok) return NextResponse.json({ error: 'Não foi possível resolver latest' }, { status: 502 });

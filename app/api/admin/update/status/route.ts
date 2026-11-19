@@ -31,7 +31,7 @@ export async function GET(request: Request) {
   const current = String(config?.versao ?? (estado as { versao?: string } | null)?.versao ?? '');
   let latest: string | null = null;
   try {
-    const r = await fetch('https://api.github.com/repos/claudioorjunior/geronticare/releases/latest', {
+    const r = await fetch('https://api.github.com/repos/claudiumio/geronticare/releases/latest', {
       headers: { Accept: 'application/vnd.github+json' },
       next: { revalidate: 3600 },
     });

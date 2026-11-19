@@ -129,7 +129,7 @@ export default function AtualizacaoPage() {
               {starting || running ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Rocket className="mr-2 h-4 w-4" />}
               {running ? `Atualizando para v${job?.target ?? status?.latest}...` : canUpdate ? `Atualizar para v${status?.latest}` : 'Nenhuma atualização pendente'}
             </Button>
-            <a href="https://github.com/claudioorjunior/geronticare/releases" target="_blank" rel="noopener noreferrer" className="text-sm text-teal-700 hover:underline">Ver releases</a>
+            <a href="https://github.com/claudiumio/geronticare/releases" target="_blank" rel="noopener noreferrer" className="text-sm text-teal-700 hover:underline">Ver releases</a>
           </div>
 
           {running && (

@@ -8,7 +8,7 @@ async function buscarLatest(fetchFn) {
   const controller = new AbortController();
   const t = setTimeout(() => controller.abort(), 3000);
   try {
-    const r = await fetchFn('https://api.github.com/repos/claudioorjunior/geronticare/releases/latest', {
+    const r = await fetchFn('https://api.github.com/repos/claudiumio/geronticare/releases/latest', {
       signal: controller.signal,
       headers: { Accept: 'application/vnd.github+json' },
     });

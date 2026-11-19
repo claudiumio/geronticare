@@ -10,7 +10,7 @@ import { comandoNpm, parsearSha256, prepararRelease, validarListagem } from '../
 
 const versao = '0.5.0';
 const porta = 3000;
-const baseUrl = `https://github.com/claudioorjunior/geronticare/releases/download/v${versao}`;
+const baseUrl = `https://github.com/claudiumio/geronticare/releases/download/v${versao}`;
 const urlTar = `${baseUrl}/geronticare-app-v${versao}.tar.gz`;
 const urlSha = `${baseUrl}/geronticare-app-v${versao}.sha256`;
 

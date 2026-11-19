@@ -332,3 +332,37 @@ test('criarBancoDedicado inicializa e inicia o cluster próprio', async () => {
   assert.match(resultado.databaseUrl, /@127\.0\.0\.1:5555\/geronticare$/);
   assert.ok(confirmacoes.length >= 1);
 });
+
+
+test('criarBancoDedicado no Windows também inicializa o cluster dedicado com binários .exe', async () => {
+  const comandos = [];
+  const executar = async (args, opcoes) => {
+    comandos.push({ args, opcoes });
+    return { exitCode: 0, stdout: '', stderr: '' };
+  };
+  const confirmar = async () => true;
+  const fsMock = {
+    stat: async () => { throw ENOENT(); },
+    mkdir: async () => {},
+    writeFile: async () => {},
+    rm: async () => {},
+  };
+
+  const resultado = await criarBancoDedicado({
+    binDir: 'C:\\Program Files\\PostgreSQL\\16\\bin',
+    root: 'C:\\GerontiCare',
+    porta: 5433,
+    instaladoPorNos: true,
+    superuserPassword: 'senha-super',
+    plataforma: 'win32',
+    confirmar,
+    executar,
+    fs: fsMock,
+  });
+
+  assert.ok(comandos.find((a) => String(a.args[0]).endsWith('initdb.exe')));
+  assert.ok(comandos.find((a) => String(a.args[0]).endsWith('pg_ctl.exe')));
+  assert.ok(comandos.find((a) => String(a.args[0]).endsWith('pg_isready.exe')));
+  assert.ok(comandos.find((a) => String(a.args[0]).endsWith('psql.exe')));
+  assert.match(resultado.databaseUrl, /@127\.0\.0\.1:5433\/geronticare$/);
+});

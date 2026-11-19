@@ -25,9 +25,9 @@
 O GerontiCare é patrocinado pela [Cheaper Inference](https://cheaperinference.com), uma API compatível com a OpenAI que oferece acesso a modelos de IA de diferentes provedores, com cobrança por uso e preços reduzidos.
 
 <p align="center">
-  <a href="https://github.com/claudioorjunior/geronticare/actions/workflows/ci.yml"><img src="https://github.com/claudioorjunior/geronticare/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/claudioorjunior/geronticare/blob/main/LICENSE"><img src="https://img.shields.io/badge/licen%C3%A7a-MIT-green.svg" alt="Licença"></a>
-  <a href="https://github.com/claudioorjunior/geronticare/releases"><img src="https://img.shields.io/badge/release-v0.5.5-blue.svg" alt="Release v0.5.5"></a>
+  <a href="https://github.com/claudiumio/geronticare/actions/workflows/ci.yml"><img src="https://github.com/claudiumio/geronticare/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/claudiumio/geronticare/blob/main/LICENSE"><img src="https://img.shields.io/badge/licen%C3%A7a-MIT-green.svg" alt="Licença"></a>
+  <a href="https://github.com/claudiumio/geronticare/releases"><img src="https://img.shields.io/badge/release-v0.5.5-blue.svg" alt="Release v0.5.5"></a>
   <img src="https://img.shields.io/badge/Node-22-339933?logo=node.js" alt="Node 22">
   <img src="https://img.shields.io/badge/PostgreSQL-16--18-4169E1?logo=postgresql" alt="PostgreSQL 16-18">
   <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js 16">
@@ -187,7 +187,7 @@ A instalação é uma **máquina de estados resumível** com 10 fases — `PREFL
 ```bash
 # 1. Clonar
 
-git clone https://github.com/claudioorjunior/geronticare.git
+git clone https://github.com/claudiumio/geronticare.git
 cd geronticare
 
 # 2. Instalar
