@@ -49,7 +49,7 @@ describe('GET /api/version', () => {
     expect(corpo.updateAvailable).toBe(true);
   });
 
-  it('cai para 0.0.0 quando não há estado de instalação', async () => {
+  it('sem estado de instalação: current null e sem alerta de atualização', async () => {
     const root = await novoRoot();
     vi.stubEnv('GERONTICARE_HOME', root);
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ tag_name: 'v0.5.6' }) })));
@@ -57,8 +57,9 @@ describe('GET /api/version', () => {
     const resposta = await GET();
     const corpo = await resposta.json();
 
-    expect(corpo.current).toBe('0.0.0');
-    expect(corpo.updateAvailable).toBe(true);
+    expect(corpo.current).toBeNull();
+    expect(corpo.latest).toBe('0.5.6');
+    expect(corpo.updateAvailable).toBe(false);
   });
 
   it('não marca atualização quando o GitHub não responde', async () => {
